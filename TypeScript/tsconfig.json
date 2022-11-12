@@ -4,15 +4,17 @@
     "target": "es5",
     "strict": true,
     "noImplicitAny": false,
-    "sourceMap": false,
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "baseUrl": "./",
+    "typeRoots": ["node_modules/@types"],
     "paths": {
-      "@/*": [
-        "app/*"
-      ]
+      "@/*": ["app/*"]
     }
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "dist", "jest.config.ts"]
 }

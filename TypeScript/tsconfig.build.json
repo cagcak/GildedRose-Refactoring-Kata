@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "esModuleInterop": false,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": false
+  },
+  "include": ["app/**/*", "test/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "test/**/*.spec.ts",
+    "test/**/*-spec.ts",
+    "test/**/*.test.ts",
+    "test/**/*-test.ts"
+  ]
+}

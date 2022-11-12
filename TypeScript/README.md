@@ -10,36 +10,55 @@ Install dependencies
 npm install
 ```
 
-## Running app
-_You may need to install `ts-node`_
+## Building app
 
 ```sh
-npx ts-node test/golden-master-text-test.ts
+npm run compile
+```
+
+## Running app
+
+```sh
+npm run start:app
 ```
 
 Or with number of days as args:
+
 ```sh
-npx ts-node test/golden-master-text-test.ts 10
+npm run start:app 10
 ```
+
+## Debugging app
+
+### Command Line Build in Debugging
+
+```sh
+npm run debug:app
+```
+
+#### Key bindings
+
+- `[c + Enter]`: Continue
+- `[n + Enter]`: Next
+- `[s + Enter]`: Step into
+- `[o + Enter]`: Steop out
+
+### Debugging on vscode
+
+Go to **Run & Debug**, click **Launch Program**
+
+see: [configuration](.vscode/launch.json)
 
 ## Running tests
 
 To run all tests
 
-### Jest way
-
 ```sh
-npm run test:jest
+npm run test
 ```
 
 To run all tests in watch mode
 
 ```sh
-npm run test:jest:watch
-```
-
-### Mocha way
-
-```sh
-npm run test:mocha
+npm run test:watch
 ```

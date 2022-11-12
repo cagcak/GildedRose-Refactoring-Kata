@@ -1,0 +1,18 @@
+{
+  "editor.tabSize": 4,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "jestrunner.configPath": "jest.config.ts",
+  "jestrunner.jestPath": "node_modules/.bin/jest",
+  "jestrunner.runOptions": ["--runInBand"],
+  "javascript.suggestionActions.enabled": false,
+  "debug.javascript.autoAttachFilter": "always",
+  "debug.javascript.autoAttachSmartPattern": [
+    "${workspaceFolder}/scripts/**",
+    "!**/node_modules/**"
+  ]
+}

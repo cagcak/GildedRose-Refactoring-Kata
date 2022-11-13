@@ -17,6 +17,13 @@
     "project": ["tsconfig.json", "tsconfig.build.json"]
   },
   "plugins": ["@typescript-eslint"],
-  "rules": {},
+  "rules": {
+    "semi": "off",
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/comma-dangle": "off"
+  },
   "ignorePatterns": ["dist", "coverage", "test", "jest.config.ts"]
 }

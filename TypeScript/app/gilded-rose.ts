@@ -1,3 +1,4 @@
+import { Goods } from './goods.enum';
 import { Item } from './item';
 
 export class GildedRose {
@@ -7,62 +8,92 @@ export class GildedRose {
     this.items = items;
   }
 
-  updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (
-        this.items[i].name != 'Aged Brie' &&
-        this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert'
-      ) {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (
-            this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert'
-          ) {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (
-            this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert'
-          ) {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
-            }
-          } else {
-            this.items[i].quality =
-              this.items[i].quality - this.items[i].quality;
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
-      }
-      console.log(this.items[i]);
+  isValidItem(item: Item): boolean {
+    if (item instanceof Object && Object.keys(item).length === 3) return true;
+
+    return false;
+  }
+
+  isValidItemQualityRange(quality: number): boolean {
+    if (isNaN(quality)) return false;
+
+    return quality >= 0 && quality <= 50;
+  }
+
+  getDegradeRate(item: Item, isExpired: boolean): number {
+    const baseDegradeRate = item.name === Goods.CONJURED ? -2 : -1;
+
+    return isExpired ? baseDegradeRate * 2 : baseDegradeRate;
+  }
+
+  getReConfiguredQuality(item: Item, adjustment: number): Item {
+    const newQuality = item.quality + adjustment;
+
+    if (!this.isValidItemQualityRange(newQuality)) {
+      return item;
     }
 
+    return { ...item, quality: newQuality };
+  }
+
+  updateQuality() {
+    this.items = this.items.map(this.getUpdatedItemQuality.bind(this));
+
     return this.items;
+  }
+
+  getUpdatedItemQuality(currentItem: Item) {
+    if (!this.isValidItem(currentItem)) {
+      throw new Error('Not a valid item. Aborting..');
+    }
+
+    let item = currentItem;
+
+    const isExpired = item.sellIn < 1;
+    const degradeRate = this.getDegradeRate(item, isExpired);
+    const degradables = [
+      Goods.AGED_BRIE,
+      Goods.SULFURAS,
+      Goods.BACKSTAGE_PASSES,
+    ];
+    const doesDegrade = !degradables.includes(item.name);
+    const hasItSellByDate = item.name !== Goods.SULFURAS;
+
+    if (doesDegrade) {
+      item = this.getReConfiguredQuality(item, degradeRate);
+    }
+
+    if (item.name === Goods.AGED_BRIE) {
+      const adjustment = isExpired ? 2 : 1;
+      item = this.getReConfiguredQuality(item, adjustment);
+    }
+
+    if (item.name === Goods.BACKSTAGE_PASSES) {
+      item = this.getBackstageQuality(item, isExpired);
+    }
+
+    if (hasItSellByDate) {
+      item.sellIn = item.sellIn - 1;
+    }
+
+    return item;
+  }
+
+  getBackstageQuality(currentItem: Item, isExpired: boolean): Item {
+    let item = this.getReConfiguredQuality(currentItem, 1);
+
+    if (item.sellIn < 11) {
+      item = this.getReConfiguredQuality(item, 1);
+    }
+
+    if (item.sellIn < 6) {
+      item = this.getReConfiguredQuality(item, 1);
+    }
+
+    if (isExpired) {
+      item.quality = item.quality - item.quality;
+    }
+
+    return item;
   }
 }

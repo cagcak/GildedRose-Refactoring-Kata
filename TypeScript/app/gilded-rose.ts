@@ -1,19 +1,9 @@
-export class Item {
-  name: string;
-  sellIn: number;
-  quality: number;
-
-  constructor(name, sellIn, quality) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
-  }
-}
+import { Item } from './item';
 
 export class GildedRose {
-  items: Array<Item>;
+  items: Item[];
 
-  constructor(items = [] as Array<Item>) {
+  constructor(items: Item[] = []) {
     this.items = items;
   }
 
@@ -70,6 +60,7 @@ export class GildedRose {
           }
         }
       }
+      console.log(this.items[i]);
     }
 
     return this.items;
